@@ -11,18 +11,6 @@ const PHOTO_STORAGE = 'photos';
 
 export function usePhotoGallery() {
     const [photos, setPhotos] = useState<UserPhoto[]>([]);
-
-    // const savePicture = async (photo: Photo, fileName: string): Promise<UserPhoto> => {
-    //     const base64Data = await base64FromPath(photo.webPath!);
-    //     await Filesystem.writeFile({
-    //         path: fileName,
-    //         data: base64Data,
-    //         directory: Directory.Data,
-    //     });
-
-    //     return { filepath: fileName, webviewPath: photo.webPath };
-    // };
-
     const savePicture = async (photo: Photo, fileName: string): Promise<UserPhoto> => {
         let base64Data: string | Blob;
         // "hybrid" will detect Cordova or Capacitor;
@@ -63,10 +51,10 @@ export function usePhotoGallery() {
             const photosInPreferences = (value ? JSON.parse(value) : []) as UserPhoto[];
             // If running on the web...
             if (!isPlatform('hybrid')) {
-                for (let photo of photosInPreferences) {
+                for (const photo of photosInPreferences) {
                     const file = await Filesystem.readFile({
                         path: photo.filepath,
-                        directory: Directory.Data,
+                        directory: Directory.Data,      
                     });
                     // Web platform only: Load the photo as base64 data
                     photo.webviewPath = `data:image/jpeg;base64,${file.data}`;
